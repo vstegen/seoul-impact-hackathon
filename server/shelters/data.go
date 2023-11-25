@@ -1,40 +1,5 @@
 package shelters
 
-import (
-	"fmt"
-	"net/http"
-	"strconv"
-
-	"github.com/labstack/echo/v4"
-)
-
-type ShelterStatus string
-
-const (
-	StatusOpen   ShelterStatus = "Open"
-	StatusClosed ShelterStatus = "Closed"
-	StatusFull   ShelterStatus = "Full"
-)
-
-type Shelter struct {
-	Id            int           `json: "id"`
-	OpeningTime   string        `json: "openingTime"`
-	Facilities    []string      `json: "facilities", omitempty`
-	Requirements  string        `json: "requirements", omitempty`
-	Rules         string        `json: "rules"`
-	MaxCapacity   int           `json: "maxCapacity"`
-	Capacity      int           `json: "capacity"`
-	Rating        int           `json: "rating", omitempty`
-	Desc          string        `json: "desc", omitempty`
-	Address       string        `json: "address"`
-	Name          string        `json: "name"`
-	CurrentStatus ShelterStatus `json: "currentStatus"`
-	Announcement  string        `json: "announcement", omitempty`
-	Contact       string        `json: "contact", omitempty`
-	Website       string        `json: "website", omitempty`
-}
-
-// TODO: Use a db instead of hardcoding
 var shelters = []Shelter{
 	{
 		Id:            1,
@@ -115,24 +80,4 @@ var shelters = []Shelter{
 		Capacity:      5,
 		CurrentStatus: StatusOpen,
 	},
-}
-
-func GetShelters(c echo.Context) error {
-	return c.JSON(http.StatusOK, shelters)
-}
-
-func GetShelter(c echo.Context) error {
-	idParam := c.Param("id")
-	id, err := strconv.Atoi(idParam)
-	if err != nil {
-		return echo.NewHTTPError(http.StatusBadRequest, fmt.Errorf("invalid id '%s': %w", idParam, err))
-	}
-	// TODO: use a map instead of looping if significantly more shelters are added
-	for _, shelter := range shelters {
-		if id == shelter.Id {
-			return c.JSON(http.StatusOK, shelter)
-		}
-	}
-
-	return echo.NewHTTPError(http.StatusNotFound, nil)
 }
