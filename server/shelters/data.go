@@ -2,7 +2,6 @@ package shelters
 
 import (
 	"errors"
-	"fmt"
 
 	"youth-korea/utils"
 )
@@ -101,13 +100,18 @@ func (r ShelterRepo) Get() ([]Shelter, error) {
 }
 
 func (r ShelterRepo) GetById(id int) (*Shelter, error) {
-	for _, s := range shelters {
+	allShelters, err := r.Get()
+	if err != nil {
+		return nil, err
+	}
+
+	for _, s := range allShelters {
 		if s.Id == id {
 			return &s, nil
 		}
 	}
 
-	return nil, fmt.Errorf("Shelter with id %d not found", id)
+	return nil, errNotFound
 }
 
 func (r ShelterRepo) GetBy(f filter) ([]Shelter, error) {

@@ -1,6 +1,7 @@
 package food
 
 import (
+	"errors"
 	"fmt"
 	"net/http"
 	"strconv"
@@ -9,8 +10,24 @@ import (
 	"github.com/labstack/echo/v4"
 )
 
+type Repo interface {
+	Get() ([]Facility, error)
+	GetById(id int) (*Facility, error)
+	GetBy(f filter) ([]Facility, error)
+}
+
+type Routes struct {
+	repo Repo
+}
+
+func NewRoutes(r Repo) Routes {
+	return Routes{
+		repo: r,
+	}
+}
+
 // TODO: potentially add query param validation for the filter
-func GetFacilities(c echo.Context) error {
+func (r Routes) GetFacilities(c echo.Context) error {
 	activeFilter := filter{}
 	activeFilter.status = RestaurantStatus(c.QueryParam("status"))
 
@@ -23,7 +40,15 @@ func GetFacilities(c echo.Context) error {
 		}
 	}
 
-	filteredFacilities := activeFilter.apply(facilities)
+	filteredFacilities, err := r.repo.GetBy(activeFilter)
+	if err != nil {
+		if errors.Is(err, errNotFound) {
+			return echo.NewHTTPError(http.StatusNotFound, err)
+		} else {
+			return echo.NewHTTPError(http.StatusInternalServerError, fmt.Errorf("error getting facility: %w", err))
+		}
+	}
+
 	if len(filteredFacilities) == 0 {
 		return c.JSON(http.StatusOK, []Facility{})
 	}
@@ -31,18 +56,21 @@ func GetFacilities(c echo.Context) error {
 	return c.JSON(http.StatusOK, filteredFacilities)
 }
 
-func GetFacility(c echo.Context) error {
+func (r Routes) GetFacility(c echo.Context) error {
 	idParam := c.Param("id")
 	id, err := strconv.Atoi(idParam)
 	if err != nil {
 		return echo.NewHTTPError(http.StatusBadRequest, fmt.Errorf("invalid id '%s': %w", idParam, err))
 	}
-	// TODO: use a map instead of looping if significantly more facilities are added
-	for _, fac := range facilities {
-		if id == fac.Id {
-			return c.JSON(http.StatusOK, fac)
+
+	fac, err := r.repo.GetById(id)
+	if err != nil {
+		if errors.Is(err, errNotFound) {
+			return echo.NewHTTPError(http.StatusNotFound, err)
+		} else {
+			return echo.NewHTTPError(http.StatusInternalServerError, fmt.Errorf("error getting facility: %w", err))
 		}
 	}
 
-	return echo.NewHTTPError(http.StatusNotFound, nil)
+	return c.JSON(http.StatusOK, fac)
 }

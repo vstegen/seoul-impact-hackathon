@@ -41,7 +41,11 @@ func (r Routes) GetShelters(c echo.Context) error {
 
 	filteredShelters, err := r.repo.GetBy(activeFilter)
 	if err != nil {
-		return echo.NewHTTPError(http.StatusInternalServerError, fmt.Errorf("error getting shelters: %w", err))
+		if errors.Is(err, errNotFound) {
+			return echo.NewHTTPError(http.StatusNotFound, err)
+		} else {
+			return echo.NewHTTPError(http.StatusInternalServerError, fmt.Errorf("error getting shelter: %w", err))
+		}
 	}
 
 	if len(filteredShelters) == 0 {

@@ -5,9 +5,8 @@ import (
 )
 
 type filter struct {
-	// using a pointer here so that we can differentiate between no value and false
-	status      RestaurantStatus
 	foodOptions map[string]struct{}
+	status      RestaurantStatus
 }
 
 func (f filter) apply(facilities []Facility) []Facility {

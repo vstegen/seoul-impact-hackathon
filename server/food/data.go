@@ -1,6 +1,12 @@
 package food
 
-import "youth-korea/utils"
+import (
+	"errors"
+
+	"youth-korea/utils"
+)
+
+var errNotFound = errors.New("shelter not found")
 
 // TODO: Use a db instead of hardcoding
 var facilities = []Facility{
@@ -42,4 +48,37 @@ var facilities = []Facility{
 		CurrentStatus: StatusClosed,
 		FoodTypes:     []FoodOption{FoodOptionHalal, FoodOptionVegetarian},
 	},
+}
+
+type FacilityRepo struct{}
+
+// NOTE: It is intended for this method to always return a nil error.
+// This is done for extensibility later when the underlying data source
+// changes into a potentially failing one.
+func (r FacilityRepo) Get() ([]Facility, error) {
+	return facilities, nil
+}
+
+func (r FacilityRepo) GetById(id int) (*Facility, error) {
+	allFacilities, err := r.Get()
+	if err != nil {
+		return nil, err
+	}
+
+	for _, f := range allFacilities {
+		if f.Id == id {
+			return &f, nil
+		}
+	}
+
+	return nil, errNotFound
+}
+
+func (r FacilityRepo) GetBy(f filter) ([]Facility, error) {
+	allFacilities, err := r.Get()
+	if err != nil {
+		return nil, errNotFound
+	}
+
+	return f.apply(allFacilities), nil
 }

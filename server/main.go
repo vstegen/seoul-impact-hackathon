@@ -17,11 +17,12 @@ func main() {
 	}))
 
 	shelterRoutes := shelters.NewRoutes(shelters.ShelterRepo{})
+	foodRoutes := food.NewRoutes(food.FacilityRepo{})
 
 	e.GET("/shelters", shelterRoutes.GetShelters)
 	e.GET("/shelters/:id", shelterRoutes.GetShelter)
-	e.GET("/food", food.GetFacilities)
-	e.GET("/food/:id", food.GetFacility)
+	e.GET("/food", foodRoutes.GetFacilities)
+	e.GET("/food/:id", foodRoutes.GetFacility)
 
 	e.Logger.Fatal(e.Start(":8000"))
 }
