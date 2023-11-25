@@ -17,6 +17,8 @@ Run the server:
 
 ### API endpoints
 
+The server is started on port `:8000`
+
 - `/shelters`: Returns all shelters irrespective of status
   A shelter adheres to the following format:
 
