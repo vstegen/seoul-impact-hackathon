@@ -1,7 +1,9 @@
 package main
 
 import (
+	"fmt"
 	"net/http"
+	"strconv"
 
 	"github.com/labstack/echo/v4"
 )
@@ -9,6 +11,7 @@ import (
 func main() {
 	e := echo.New()
 	e.GET("/shelters", getShelters)
+	e.GET("/shelters/:id", getShelter)
 	e.Logger.Fatal(e.Start(":8000"))
 }
 
@@ -21,6 +24,7 @@ const (
 )
 
 type Shelter struct {
+	Id            int           `json: "id"`
 	OpeningTime   string        `json: "openingTime"`
 	Facilities    []string      `json: "facilities", omitempty`
 	Requirements  string        `json: "requirements", omitempty`
@@ -37,8 +41,10 @@ type Shelter struct {
 	Website       string        `json: "website", omitempty`
 }
 
+// TODO: Use a db instead of hardcoding
 var shelters = []Shelter{
 	{
+		Id:            1,
 		Name:          "Korea Women’s Hotline",
 		Address:       "8-4, Jinheung-ro 16-gil, Eunpyeong-gu, Seoul, 03369, Republic of KOREA",
 		Contact:       "82-2-3156-5400",
@@ -51,6 +57,7 @@ var shelters = []Shelter{
 		CurrentStatus: StatusOpen,
 	},
 	{
+		Id:            2,
 		Name:          "Salvation Army Korea",
 		Address:       "130 Deoksugung-gil, Jung-gu, Seoul 100-120",
 		Facilities:    []string{"Childcare", "Physical Health", "Education", "Rent Assistance", "Utility Assistance", "Meals", "Emergency Shelters", "Family Shelters", "Youth Shelters", "Counseling", "Clothing"},
@@ -63,6 +70,7 @@ var shelters = []Shelter{
 		CurrentStatus: StatusClosed,
 	},
 	{
+		Id:            3,
 		Name:          "Anna’s House",
 		Address:       "118 Hadaewon-dong, Jungian-gu Seongnam-si, Gyeonggi-do",
 		Facilities:    []string{"Emergency Shelters", "Meals", "Clothing", "Physical Health", "Counseling", "Education"},
@@ -76,6 +84,7 @@ var shelters = []Shelter{
 		Announcement:  "We are currently full, please check back later",
 	},
 	{
+		Id:            4,
 		Name:          "SOS Children's Village Seoul",
 		Address:       "Seoul, South Korea",
 		Facilities:    []string{"Childcare", "Youth Shelters", "Meals", "Physical Health", "Education"},
@@ -88,6 +97,7 @@ var shelters = []Shelter{
 		CurrentStatus: StatusOpen,
 	},
 	{
+		Id:            5,
 		Name:          "Happy Home",
 		Address:       "675-2 Bupyeong 2(i)-dong, Bupyeong-gu, Incheon, South Korea",
 		Facilities:    []string{"Childcare", "Youth Shelters", "Meals", "Education", "Counseling"},
@@ -100,6 +110,7 @@ var shelters = []Shelter{
 		CurrentStatus: StatusOpen,
 	},
 	{
+		Id:            6,
 		Name:          "Rainbow Youth Center",
 		Address:       "20 Jahamun-ro 24-gil, Jongno-gu, Seoul, South Korea",
 		Facilities:    []string{"Youth Shelters", "Counseling", "Education"},
@@ -115,4 +126,20 @@ var shelters = []Shelter{
 
 func getShelters(c echo.Context) error {
 	return c.JSON(http.StatusOK, shelters)
+}
+
+func getShelter(c echo.Context) error {
+	idParam := c.Param("id")
+	id, err := strconv.Atoi(idParam)
+	if err != nil {
+		return echo.NewHTTPError(http.StatusBadRequest, fmt.Errorf("invalid id '%s': %w", idParam, err))
+	}
+	// TODO: use a map instead of looping if significantly more shelters are added
+	for _, shelter := range shelters {
+		if id == shelter.Id {
+			return c.JSON(http.StatusOK, shelter)
+		}
+	}
+
+	return echo.NewHTTPError(http.StatusNotFound, nil)
 }

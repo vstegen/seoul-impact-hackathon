@@ -41,5 +41,7 @@ type Shelter struct {
 	Website       string        `json: "website", omitempty`
 }
 
-```
+- `shelter/:id`: Returns a single shelter with the passed ID. IDs should be numeric. If no shelters are found, the API
+  will return a `404`. In case of non-numeric IDs, the error code will be `400`.
 
+```
