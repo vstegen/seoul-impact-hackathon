@@ -26,6 +26,10 @@ func (f baseFilter) apply(shelters []Shelter) []Shelter {
 			continue
 		}
 
+		if f.hasCapacity != nil && !*f.hasCapacity && shelter.hasCapacity() {
+			continue
+		}
+
 		filteredShelters = append(filteredShelters, shelter)
 	}
 
