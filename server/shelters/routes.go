@@ -8,6 +8,7 @@ import (
 	"github.com/labstack/echo/v4"
 )
 
+// TODO: potentially add query param validation for the filter
 func GetShelters(c echo.Context) error {
 	activeFilter := filter{}
 	activeFilter.status = ShelterStatus(c.QueryParam("status"))

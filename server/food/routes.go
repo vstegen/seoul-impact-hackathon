@@ -9,6 +9,7 @@ import (
 	"github.com/labstack/echo/v4"
 )
 
+// TODO: potentially add query param validation for the filter
 func GetFacilities(c echo.Context) error {
 	activeFilter := filter{}
 	activeFilter.status = RestaurantStatus(c.QueryParam("status"))
