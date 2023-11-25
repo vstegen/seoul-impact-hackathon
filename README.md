@@ -25,6 +25,7 @@ The server is started on port `:8000`
 ```go
 
 type Shelter struct {
+	Id            int           `json: "id"`
 	OpeningTime   string        `json: "openingTime"`
 	Facilities    []string      `json: "facilities", omitempty`
 	Requirements  string        `json: "requirements", omitempty`
