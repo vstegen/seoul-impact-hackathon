@@ -4,13 +4,17 @@ import (
 	"strings"
 )
 
-type filter struct {
+type baseFilter struct {
 	// using a pointer here so that we can differentiate between no value and false
 	hasCapacity *bool
 	status      ShelterStatus
 }
 
-func (f filter) apply(shelters []Shelter) []Shelter {
+type filter interface {
+	apply(shelters []Shelter) []Shelter
+}
+
+func (f baseFilter) apply(shelters []Shelter) []Shelter {
 	var filteredShelters []Shelter
 
 	for _, shelter := range shelters {

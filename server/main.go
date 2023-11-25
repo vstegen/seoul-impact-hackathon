@@ -16,8 +16,10 @@ func main() {
 		AllowHeaders: []string{echo.HeaderOrigin, echo.HeaderContentType, echo.HeaderAccept, echo.HeaderAccessControlAllowOrigin},
 	}))
 
-	e.GET("/shelters", shelters.GetShelters)
-	e.GET("/shelters/:id", shelters.GetShelter)
+	shelterRoutes := shelters.NewRoutes(shelters.ShelterRepo{})
+
+	e.GET("/shelters", shelterRoutes.GetShelters)
+	e.GET("/shelters/:id", shelterRoutes.GetShelter)
 	e.GET("/food", food.GetFacilities)
 	e.GET("/food/:id", food.GetFacility)
 

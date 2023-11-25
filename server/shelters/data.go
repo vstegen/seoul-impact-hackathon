@@ -1,6 +1,13 @@
 package shelters
 
-import "youth-korea/utils"
+import (
+	"errors"
+	"fmt"
+
+	"youth-korea/utils"
+)
+
+var errNotFound = errors.New("shelter not found")
 
 var shelters = []Shelter{
 	{
@@ -66,8 +73,8 @@ var shelters = []Shelter{
 		OpeningTime:   "Mon-Fri 20:00-10:00, Sat-Sun 18:00-10:00, Holidays 18:00-10:00",
 		Rules:         "<Imagine some rules here>",
 		MaxCapacity:   20,
-		Capacity:      5,
-		CurrentStatus: StatusOpen,
+		Capacity:      20,
+		CurrentStatus: StatusFull,
 	},
 	{
 		Id:            6,
@@ -82,4 +89,32 @@ var shelters = []Shelter{
 		Capacity:      5,
 		CurrentStatus: StatusOpen,
 	},
+}
+
+type ShelterRepo struct{}
+
+// NOTE: It is intended for this method to always return a nil error.
+// This is done for extensibility later when the underlying data source
+// changes into a potentially failing one.
+func (r ShelterRepo) Get() ([]Shelter, error) {
+	return shelters, nil
+}
+
+func (r ShelterRepo) GetById(id int) (*Shelter, error) {
+	for _, s := range shelters {
+		if s.Id == id {
+			return &s, nil
+		}
+	}
+
+	return nil, fmt.Errorf("Shelter with id %d not found", id)
+}
+
+func (r ShelterRepo) GetBy(f filter) ([]Shelter, error) {
+	shelters, err := r.Get()
+	if err != nil {
+		return nil, errNotFound
+	}
+
+	return f.apply(shelters), nil
 }
