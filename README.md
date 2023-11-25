@@ -40,12 +40,12 @@ type Shelter struct {
 	Contact       *string       `json:"contact,omitempty"`
 	Website       *string       `json:"website,omitempty"`
 }
+```
 
 The endpoint accepts the following query parameters for filtering the returned shelters:
 
     - `hasCapacity`: boolean
     - `status`: string
-```
 
 - `shelter/:id`: Returns a single shelter with the passed ID. IDs should be numeric. If no shelters are found, the API
   will return a `404`. In case of non-numeric IDs, the error code will be `400`.
