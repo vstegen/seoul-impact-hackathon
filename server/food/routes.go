@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"net/http"
 	"strconv"
+	"strings"
 
 	"github.com/labstack/echo/v4"
 )
@@ -12,12 +13,21 @@ func GetFacilities(c echo.Context) error {
 	activeFilter := filter{}
 	activeFilter.status = RestaurantStatus(c.QueryParam("status"))
 
+	foodOptionsQueryParam := c.QueryParam("foodOptions")
+	if foodOptionsQueryParam != "" {
+		foodOptions := strings.Split(foodOptionsQueryParam, ",")
+		activeFilter.foodOptions = make(map[string]struct{})
+		for _, foodOption := range foodOptions {
+			activeFilter.foodOptions[strings.ToLower(foodOption)] = struct{}{}
+		}
+	}
+
 	filteredFacilities := activeFilter.apply(facilities)
 	if len(filteredFacilities) == 0 {
 		return c.JSON(http.StatusOK, []Facility{})
 	}
 
-	return c.JSON(http.StatusOK, facilities)
+	return c.JSON(http.StatusOK, filteredFacilities)
 }
 
 func GetFacility(c echo.Context) error {

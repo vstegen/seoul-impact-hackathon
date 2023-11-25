@@ -30,7 +30,7 @@ var facilities = []Facility{
 		Website:       utils.String("enghotline.cafe24.com"),
 		OpeningTime:   "Mon-Fri 20:00-10:00, Sat-Sun 18:00-10:00, Holidays 18:00-10:00",
 		CurrentStatus: StatusOpen,
-		FoodTypes:     []FoodOptions{FoodOptionVegan, FoodOptionVegetarian},
+		FoodTypes:     []FoodOption{FoodOptionVegan, FoodOptionVegetarian},
 	},
 	{
 		Id:            4,
@@ -40,5 +40,6 @@ var facilities = []Facility{
 		Website:       utils.String("en.salvationarmy.kr"),
 		OpeningTime:   "Mon-Fri 20:00-10:00, Sat-Sun 18:00-10:00, Holidays 18:00-10:00",
 		CurrentStatus: StatusClosed,
+		FoodTypes:     []FoodOption{FoodOptionHalal, FoodOptionVegetarian},
 	},
 }

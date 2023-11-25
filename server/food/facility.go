@@ -7,13 +7,13 @@ const (
 	StatusClosed RestaurantStatus = "Closed"
 )
 
-type FoodOptions string
+type FoodOption string
 
 const (
-	FoodOptionVegan      FoodOptions = "Vegan"
-	FoodOptionVegetarian FoodOptions = "Vegetarian"
-	FoodOptionHalal      FoodOptions = "Halal"
-	FoodOptionGlutenFree FoodOptions = "Gluten Free"
+	FoodOptionVegan      FoodOption = "Vegan"
+	FoodOptionVegetarian FoodOption = "Vegetarian"
+	FoodOptionHalal      FoodOption = "Halal"
+	FoodOptionGlutenFree FoodOption = "Gluten Free"
 )
 
 type Facility struct {
@@ -27,5 +27,5 @@ type Facility struct {
 	Announcement  *string          `json:"announcement,omitempty"`
 	Contact       *string          `json:"contact,omitempty"`
 	Website       *string          `json:"website,omitempty"`
-	FoodTypes     []FoodOptions    `json:"foodTypes"`
+	FoodTypes     []FoodOption     `json:"foodTypes"`
 }

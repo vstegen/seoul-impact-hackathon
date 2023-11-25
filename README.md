@@ -69,5 +69,10 @@ type Facility struct {
 }
 ```
 
+The endpoint accepts the following query parameters for filtering the returned facilities:
+
+    - `status`: string
+    - `foodOptions`: comma-separated list
+
 - `food/:id`: Returns a single facility with the passed ID. IDs should be numeric. If no facilities are found, the API
   will return a `404`. In case of non-numeric IDs, the error code will be `400`.

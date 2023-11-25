@@ -6,7 +6,8 @@ import (
 
 type filter struct {
 	// using a pointer here so that we can differentiate between no value and false
-	status RestaurantStatus
+	status      RestaurantStatus
+	foodOptions map[string]struct{}
 }
 
 func (f filter) apply(facilities []Facility) []Facility {
@@ -17,7 +18,23 @@ func (f filter) apply(facilities []Facility) []Facility {
 			continue
 		}
 
+		if f.foodOptions != nil && len(f.foodOptions) > 0 {
+			var hasFoodType bool
+			for _, foodType := range fac.FoodTypes {
+				option := strings.ToLower(string(foodType))
+				if _, ok := f.foodOptions[option]; ok {
+					hasFoodType = true
+					break
+				}
+			}
+
+			if !hasFoodType {
+				continue
+			}
+		}
+
 		filteredFacilities = append(filteredFacilities, fac)
+
 	}
 
 	return filteredFacilities
