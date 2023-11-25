@@ -16,6 +16,9 @@ const (
 	FoodOptionGlutenFree FoodOption = "Gluten Free"
 )
 
+// NOTE: pointer fields are used for clear separation between
+// required and optional fields. Any field that is not a pointer
+// is expected to be available information about the facility.
 type Facility struct {
 	Id            int              `json:"id"`
 	OpeningTime   string           `json:"openingTime"`

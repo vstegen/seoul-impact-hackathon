@@ -2,6 +2,7 @@ package shelters
 
 import (
 	"errors"
+	"fmt"
 
 	"youth-korea/utils"
 )
@@ -90,19 +91,25 @@ var shelters = []Shelter{
 	},
 }
 
+// ShelterRepo is a in-memory repository for shelters.
+// It is using hard-coded data for ease of implementation.
 type ShelterRepo struct{}
 
-// NOTE: It is intended for this method to always return a nil error.
-// This is done for extensibility later when the underlying data source
-// changes into a potentially failing one.
+// Get() returns all shelters irrespective of their status.
 func (r ShelterRepo) Get() ([]Shelter, error) {
+	// NOTE: It is intended for this method to always return a nil error.
+	// This is done for extensibility later when the underlying data source
+	// changes into a potentially failing one.
 	return shelters, nil
 }
 
+// GetById() returns a single shelter by its id.
+// If no shelter is found, it returns an errNotFound,
+// otherwise it will propagate the underlying error.
 func (r ShelterRepo) GetById(id int) (*Shelter, error) {
 	allShelters, err := r.Get()
 	if err != nil {
-		return nil, err
+		return nil, fmt.Errorf("failed to get all shelters: %w", err)
 	}
 
 	for _, s := range allShelters {
@@ -114,6 +121,7 @@ func (r ShelterRepo) GetById(id int) (*Shelter, error) {
 	return nil, errNotFound
 }
 
+// GetBy() returns a list of shelters that match the given filter.
 func (r ShelterRepo) GetBy(f filter) ([]Shelter, error) {
 	shelters, err := r.Get()
 	if err != nil {

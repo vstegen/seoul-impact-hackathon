@@ -8,7 +8,6 @@ import (
 
 var errNotFound = errors.New("shelter not found")
 
-// TODO: Use a db instead of hardcoding
 var facilities = []Facility{
 	{
 		Id:            1,
@@ -50,15 +49,21 @@ var facilities = []Facility{
 	},
 }
 
+// FacilityRepo is a in-memory repository for facilities.
+// It is using hard-coded data for ease of implementation.
 type FacilityRepo struct{}
 
-// NOTE: It is intended for this method to always return a nil error.
-// This is done for extensibility later when the underlying data source
-// changes into a potentially failing one.
+// Get() returns all facilities irrespective of their status.
 func (r FacilityRepo) Get() ([]Facility, error) {
+	// NOTE: It is intended for this method to always return a nil error.
+	// This is done for extensibility later when the underlying data source
+	// changes into a potentially failing one.
 	return facilities, nil
 }
 
+// GetById() returns a single facility by its id.
+// If no facility is found, it returns an errNotFound,
+// otherwise it will propagate the underlying error.
 func (r FacilityRepo) GetById(id int) (*Facility, error) {
 	allFacilities, err := r.Get()
 	if err != nil {
@@ -74,6 +79,7 @@ func (r FacilityRepo) GetById(id int) (*Facility, error) {
 	return nil, errNotFound
 }
 
+// GetBy() returns a list of facilities that match the given filter.
 func (r FacilityRepo) GetBy(f filter) ([]Facility, error) {
 	allFacilities, err := r.Get()
 	if err != nil {

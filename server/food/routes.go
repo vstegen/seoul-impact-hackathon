@@ -10,23 +10,32 @@ import (
 	"github.com/labstack/echo/v4"
 )
 
-type Repo interface {
+type repo interface {
 	Get() ([]Facility, error)
 	GetById(id int) (*Facility, error)
 	GetBy(f filter) ([]Facility, error)
 }
 
+// Routes is a collection of the handlers available for facilities.
 type Routes struct {
-	repo Repo
+	repo repo
 }
 
-func NewRoutes(r Repo) Routes {
+// NewRoutes returns a new instance of Routes that configures
+// the given repo as the underlying data source.
+func NewRoutes(r repo) Routes {
 	return Routes{
 		repo: r,
 	}
 }
 
-// TODO: potentially add query param validation for the filter
+// GetFacilities returns a list of facilities.
+// If no query parameters are given, it returns all facilities,
+// otherwise it will filter the facilities based on the given parameters.
+//
+// Accepted query parameters:
+// - status: string
+// - foodOptions: comma-separated list of strings, e.g. "vegan,vegetarian"
 func (r Routes) GetFacilities(c echo.Context) error {
 	activeFilter := filter{}
 	activeFilter.status = RestaurantStatus(c.QueryParam("status"))
@@ -56,6 +65,8 @@ func (r Routes) GetFacilities(c echo.Context) error {
 	return c.JSON(http.StatusOK, filteredFacilities)
 }
 
+// GetShelter returns a single shelter.
+// It makes the assumption that the URI contains the ID of the shelter.
 func (r Routes) GetFacility(c echo.Context) error {
 	idParam := c.Param("id")
 	id, err := strconv.Atoi(idParam)

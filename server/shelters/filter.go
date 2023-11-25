@@ -5,7 +5,7 @@ import (
 )
 
 type baseFilter struct {
-	// using a pointer here so that we can differentiate between no value and false
+	// using a pointer here so that we can differentiate between no value and the default false
 	hasCapacity *bool
 	status      ShelterStatus
 }
