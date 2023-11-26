@@ -16,7 +16,7 @@ export default function ShelterDetail() {
         const response = await axios.get(
           `http://localhost:8000/shelters/${id}`
         );
-        console.log("response-" + JSON.stringify(response));
+        // console.log("response-" + JSON.stringify(response));
         setShelter(response.data);
         setLoading(false);
       } catch (error) {
