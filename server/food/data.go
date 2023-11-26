@@ -44,7 +44,7 @@ var facilities = []Facility{
 		Contact:       utils.String("+82-2-6364-4000"),
 		Website:       utils.String("en.salvationarmy.kr"),
 		OpeningTime:   "Mon-Fri 20:00-10:00, Sat-Sun 18:00-10:00, Holidays 18:00-10:00",
-		CurrentStatus: StatusClosed,
+		CurrentStatus: StatusOpen,
 		FoodTypes:     []FoodOption{FoodOptionHalal, FoodOptionVegetarian},
 	},
 }
