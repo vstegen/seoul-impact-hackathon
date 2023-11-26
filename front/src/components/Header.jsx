@@ -1,10 +1,7 @@
 import React from "react";
 import { useState } from "react";
 import { Dialog } from "@headlessui/react";
-import HomeImg from "../assets/images/heart_3.png";
-import Partner1 from "../assets/images/partner_1.png";
-import Partner2 from "../assets/images/partner_2.png";
-import Partner3 from "../assets/images/partner_3.png";
+
 import {
   ArrowPathIcon,
   Bars3Icon,
@@ -17,9 +14,9 @@ import { CheckIcon } from "@heroicons/react/20/solid";
 
 const navigation = [
   { name: "About", href: "/about" },
-  { name: "Shelter", href: "/shelters" },
-  { name: "Food", href: "/restaurants" },
-  { name: "Support", href: "/support" },
+  { name: "Shelters", href: "/shelters" },
+  { name: "Restaurants", href: "/restaurants" },
+  // { name: "Support", href: "/support" },
   { name: "Contact", href: "/contact" },
 ];
 const features = [
@@ -81,7 +78,7 @@ const tiers = [
   {
     name: "Enterprise",
     id: "tier-enterprise",
-    href: "#",
+    href: "/",
     priceMonthly: "$48",
     description: "Dedicated support and infrastructure for your company.",
     features: [
@@ -118,7 +115,7 @@ export default function Header() {
           aria-label="Global"
         >
           <div className="flex lg:flex-1">
-            <a href="#" className="-m-1.5 p-1.5">
+            <a href="/" className="-m-1.5 p-1.5">
               <span className="sr-only">Your Company</span>
               <svg
                 xmlns="http://www.w3.org/2000/svg"
@@ -175,8 +172,7 @@ export default function Header() {
           <div className="fixed inset-0 z-50" />
           <Dialog.Panel className="fixed inset-y-0 right-0 z-50 w-full overflow-y-auto bg-white px-6 py-6 sm:max-w-sm sm:ring-1 sm:ring-gray-900/10">
             <div className="flex items-center justify-between">
-              <a href="#" className="-m-1.5 p-1.5">
-                <span className="sr-only">Your Company</span>
+              <a href="/" className="-m-1.5 p-1.5">
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
                   fill="none"
