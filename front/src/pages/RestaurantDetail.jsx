@@ -17,7 +17,7 @@ export default function RestaurantDetail() {
     const fetchData = async () => {
       try {
         const response = await axios.get(`http://localhost:8000/food/${id}`);
-        console.log("response-" + JSON.stringify(response));
+        // console.log("response-" + JSON.stringify(response));
         setRestaurant(response.data);
         setLoading(false);
       } catch (error) {

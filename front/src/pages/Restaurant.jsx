@@ -11,7 +11,7 @@ export default function Restaurant() {
     const fetchData = async () => {
       try {
         const response = await axios.get("http://localhost:8000/food");
-        console.log("response-" + JSON.stringify(response));
+        // console.log("response-" + JSON.stringify(response));
         setRestaurants(response.data);
         setLoading(false);
       } catch (error) {
@@ -40,28 +40,33 @@ export default function Restaurant() {
                         {restaurant.name}
                       </p>
                       <p className="mt-1 truncate text-xs leading-5 text-gray-500">
-                        {restaurant.email}
+                        {restaurant.contact}
+                      </p>
+                      <p className="mt-1 truncate text-xs leading-5 text-gray-500">
+                        {restaurant.website}
                       </p>
                     </div>
                   </div>
                   <div className="hidden shrink-0 sm:flex sm:flex-col sm:items-end">
                     <p className="text-sm leading-6 text-gray-900">
-                      {restaurant.role}
+                      {restaurant.foodTypes}
                     </p>
-                    {restaurant.lastSeen ? (
-                      <p className="mt-1 text-xs leading-5 text-gray-500">
-                        Last seen{" "}
-                        <time dateTime={restaurant.lastSeenDateTime}>
-                          {restaurant.lastSeen}
-                        </time>
-                      </p>
-                    ) : (
+                    {restaurant.currentStatus == "Open" ? (
                       <div className="mt-1 flex items-center gap-x-1.5">
                         <div className="flex-none rounded-full bg-emerald-500/20 p-1">
                           <div className="h-1.5 w-1.5 rounded-full bg-emerald-500" />
                         </div>
                         <p className="text-xs leading-5 text-gray-500">
-                          Online
+                          {restaurant.currentStatus}
+                        </p>
+                      </div>
+                    ) : (
+                      <div className="mt-1 flex items-center gap-x-1.5">
+                        <div className="flex-none rounded-full bg-red-500/20 p-1">
+                          <div className="h-1.5 w-1.5 rounded-full bg-red-500" />
+                        </div>
+                        <p className="text-xs leading-5 text-gray-500">
+                          {restaurant.currentStatus}
                         </p>
                       </div>
                     )}

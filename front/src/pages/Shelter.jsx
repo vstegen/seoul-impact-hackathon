@@ -26,7 +26,7 @@ export default function Shelter() {
     const fetchData = async () => {
       try {
         const response = await axios.get("http://localhost:8000/shelters");
-        console.log("response-" + JSON.stringify(response));
+        // console.log("response-" + JSON.stringify(response));
         setShelters(response.data);
         setLoading(false);
       } catch (error) {
@@ -78,10 +78,6 @@ export default function Shelter() {
                         href={`mailto:${shelter.email}`}
                         className="relative -mr-px inline-flex w-0 flex-1 items-center justify-center gap-x-3 rounded-bl-lg border border-transparent py-4 text-sm font-semibold text-gray-900"
                       >
-                        {/* <EnvelopeIcon
-                        className="h-5 w-5 text-gray-400"
-                        aria-hidden="true"
-                      /> */}
                         <div>{shelter.openingTime.split(", ")[0]}</div>
                       </a>
                     </div>
